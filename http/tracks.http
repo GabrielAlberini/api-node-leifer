@@ -1,7 +1,7 @@
 ### Tracks
 GET http://127.0.0.1:3001/api/tracks
 
-### Track
+### Tracks
 GET http://127.0.0.1:3001/api/tracks/1
 
 ### Create track

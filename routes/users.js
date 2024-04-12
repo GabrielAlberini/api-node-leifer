@@ -5,7 +5,7 @@ import {
   createItem,
   updateItem,
   deletetItem,
-} from "../controllers/storages.js";
+} from "../controllers/users.js";
 
 const usersRouter = Router();
 

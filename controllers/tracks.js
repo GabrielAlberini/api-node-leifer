@@ -1,4 +1,5 @@
 import { TracksModel } from "../models/index.js";
+import { validateTrack, validatePartialTrack } from "../validators/tracks.js";
 
 /**
  * Obtener lista de items
@@ -23,9 +24,21 @@ const getItem = (req, res) => {};
  * @param {*} res
  */
 const createItem = async (req, res) => {
-  const { body } = req;
-  const data = await TracksModel.create(body);
-  res.status(201).json({ data });
+  try {
+    const { body } = req;
+
+    const validate = validateTrack(body);
+
+    if (!validate.success) {
+      return res.status(400).json({ error: validate.error.issues });
+    }
+
+    const newTrack = await TracksModel.create(body);
+    res.status(201).json({ data: newTrack });
+  } catch (error) {
+    console.error("Error in createItem:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 /**

@@ -9,11 +9,10 @@ POST http://127.0.0.1:3001/api/users
 Content-Type: application/json
 
 {
-  "name": "Nombre del Usuario",
+  "name": "Otro nombre",
   "age": 25,
-  "email": "usuario@example.com",
-  "password": "contraseña",
-  "role": "user"
+  "email": "pedro@example.com",
+  "password": "contraseña"
 }
 
 ### Update user

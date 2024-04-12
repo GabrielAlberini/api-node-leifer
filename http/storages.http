@@ -1,0 +1,25 @@
+### Storages
+GET http://127.0.0.1:3001/api/storages
+
+### Storage
+GET http://127.0.0.1:3001/api/storages/1
+
+### Create storage
+POST http://127.0.0.1:3001/api/storages
+Content-Type: application/json
+
+{
+  "url": "Url del archivo",
+  "filename": "Nombre del archivo",
+}
+
+### Update storage
+PATCH http://127.0.0.1:3001/api/storages/1
+Content-Type: application/json
+
+{
+  "age": 26
+}
+
+### Delete storage
+DELETE  http://127.0.0.1:3001/api/storages/1

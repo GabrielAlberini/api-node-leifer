@@ -1,0 +1,37 @@
+### Tracks
+GET http://127.0.0.1:3001/api/tracks
+
+### Track
+GET http://127.0.0.1:3001/api/tracks/1
+
+### Create track
+POST http://127.0.0.1:3001/api/tracks
+Content-Type: application/json
+
+{
+  "name": "Nombre de la Pista",
+  "album": "Nombre del Álbum",
+  "cover": "URL de la Portada",
+  "artist": {
+    "name": "Nombre del Artista",
+    "nickname": "Apodo del Artista",
+    "nationality": "Nacionalidad del Artista"
+  },
+  "duration": {
+    "start": 0,
+    "end": 180
+  },
+  "mediaId": "ID del Medio" 
+}
+
+
+### Update track
+PATCH http://127.0.0.1:3001/api/tracks/1
+Content-Type: application/json
+
+{
+  "cover": "Otra URL",
+}
+
+### Delete track
+DELETE  http://127.0.0.1:3001/api/tracks/1

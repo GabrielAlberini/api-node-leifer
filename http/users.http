@@ -1,0 +1,28 @@
+### Users
+GET http://127.0.0.1:3001/api/users
+
+### User
+GET http://127.0.0.1:3001/api/users/1
+
+### Create user
+POST http://127.0.0.1:3001/api/users
+Content-Type: application/json
+
+{
+  "name": "Nombre del Usuario",
+  "age": 25,
+  "email": "usuario@example.com",
+  "password": "contraseña",
+  "role": "user"
+}
+
+### Update user
+PATCH http://127.0.0.1:3001/api/users/1
+Content-Type: application/json
+
+{
+  "age": 26
+}
+
+### Delete user
+DELETE  http://127.0.0.1:3001/api/users/1

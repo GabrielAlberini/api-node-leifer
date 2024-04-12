@@ -18,11 +18,6 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 
-app.use("/api/", (req, res) => {
-  res.json({
-    state: 200,
-  });
-});
 app.use("/api/", indexRouter);
 
 app.listen(PORT, () => {

@@ -1,9 +1,14 @@
+import { TracksModel } from "../models/index.js";
+
 /**
  * Obtener lista de items
  * @param {*} req
  * @param {*} res
  */
-const getItems = (req, res) => {};
+const getItems = async (req, res) => {
+  const data = await TracksModel.find({});
+  res.json({ data });
+};
 
 /**
  * Obtener un detalle de un registro
@@ -17,7 +22,11 @@ const getItem = (req, res) => {};
  * @param {*} req
  * @param {*} res
  */
-const createItem = (req, res) => {};
+const createItem = async (req, res) => {
+  const { body } = req;
+  const data = await TracksModel.create(body);
+  res.status(201).json({ data });
+};
 
 /**
  * Actualizar un registro

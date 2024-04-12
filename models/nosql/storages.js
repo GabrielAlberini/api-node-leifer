@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const StorageSchema = new mongoose.Schema(
+const StoragesSchema = new mongoose.Schema(
   {
     url: {
       type: String,
@@ -15,4 +15,4 @@ const StorageSchema = new mongoose.Schema(
   }
 );
 
-export const StorageModel = mongoose.model("storages", StorageSchema);
+export const StoragesModel = mongoose.model("storages", StoragesSchema);

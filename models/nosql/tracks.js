@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const TrackSchema = new mongoose.Schema(
+const TracksSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -46,4 +46,4 @@ const TrackSchema = new mongoose.Schema(
   }
 );
 
-export const TrackModel = mongoose.model("tracks", TrackSchema);
+export const TracksModel = mongoose.model("tracks", TracksSchema);

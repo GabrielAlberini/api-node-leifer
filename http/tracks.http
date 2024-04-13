@@ -1,8 +1,8 @@
 ### Tracks
 GET http://127.0.0.1:3001/api/tracks
 
-### Tracks
-GET http://127.0.0.1:3001/api/tracks/1
+### Track
+GET http://127.0.0.1:3001/api/tracks/6619b5d2f61075d7818b1f95
 
 ### Create track
 POST http://127.0.0.1:3001/api/tracks
@@ -26,12 +26,13 @@ Content-Type: application/json
 
 
 ### Update track
-PATCH http://127.0.0.1:3001/api/tracks/1
+PATCH http://127.0.0.1:3001/api/tracks/6619b5d2f61075d7818b1f95
 Content-Type: application/json
 
-{
-  "cover": "Otra URL",
+{  
+  "cover": 1
 }
 
+
 ### Delete track
-DELETE  http://127.0.0.1:3001/api/tracks/1
+DELETE  http://127.0.0.1:3001/api/tracks/6619b5d2f61075d7818b1f95

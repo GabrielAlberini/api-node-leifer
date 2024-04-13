@@ -6,13 +6,12 @@ import { validateTrack, validatePartialTrack } from "../validators/tracks.js";
  * @param {*} req
  * @param {*} res
  */
-const getItems = async (req, res) => {
+const getItems = async (req, res, next) => {
   try {
     const data = await TracksModel.find({});
     res.json({ data });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
   }
 };
 
@@ -21,18 +20,19 @@ const getItems = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
-const getItem = async (req, res) => {
+const getItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
     const item = await TracksModel.findById(id).exec();
     if (!item) {
-      return res.status(404).json({ error: "El item no fue encontrado." });
+      const error = new Error();
+      error.name = "NotFoundError";
+      throw error;
     }
     res.json({ data: item });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Hubo un error al buscar el item por ID." });
+    next(error);
   }
 };
 
@@ -41,7 +41,7 @@ const getItem = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
-const createItem = async (req, res) => {
+const createItem = async (req, res, next) => {
   try {
     const { body } = req;
 
@@ -63,7 +63,7 @@ const createItem = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
-const updateItem = async (req, res) => {
+const updateItem = async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
 
@@ -76,12 +76,13 @@ const updateItem = async (req, res) => {
       new: true,
     });
     if (!updatedItem) {
-      return res.status(404).json({ error: "El item no fue encontrado." });
+      const error = new Error();
+      error.name = "NotFoundError";
+      throw error;
     }
     res.json({ data: updatedItem });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Hubo un error al actualizar el item." });
+    next(error);
   }
 };
 
@@ -90,18 +91,19 @@ const updateItem = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
-const deletetItem = async (req, res) => {
+const deletetItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
     const deletedItem = await TracksModel.findByIdAndDelete(id);
     if (!deletedItem) {
-      return res.status(404).json({ error: "El item no fue encontrado." });
+      const error = new Error();
+      error.name = "NotFoundError";
+      throw error;
     }
     res.json({ data: deletedItem });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Hubo un error al actualizar el item." });
+    next(error);
   }
 };
 

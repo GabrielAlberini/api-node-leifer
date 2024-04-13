@@ -26,13 +26,13 @@ Content-Type: application/json
 
 
 ### Update track
-PATCH http://127.0.0.1:3001/api/tracks/6619b5d2f61075d7818b1f95
+PATCH http://127.0.0.1:3001/api/tracks/6619aeb2194dc754ca63a9
 Content-Type: application/json
 
 {  
-  "cover": 1
+  "cover": "Lalala"
 }
 
 
-### Delete track
+### Delete tracks
 DELETE  http://127.0.0.1:3001/api/tracks/6619b5d2f61075d7818b1f95

@@ -4,7 +4,7 @@ import {
   getItem,
   createItem,
   updateItem,
-  deletetItem,
+  deleteItem,
 } from "../controllers/storages.js";
 
 const storagesRouter = Router();
@@ -13,6 +13,6 @@ storagesRouter.get("/", getItems);
 storagesRouter.get("/:id", getItem);
 storagesRouter.post("/", createItem);
 storagesRouter.patch("/:id", updateItem);
-storagesRouter.delete("/:id", deletetItem);
+storagesRouter.delete("/:id", deleteItem);
 
 export default storagesRouter;

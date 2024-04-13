@@ -14,9 +14,9 @@ const durationSchema = zod.object({
 const trackSchema = zod.object({
   name: zod.string(),
   album: zod.string(),
-  cover: zod.string(), // Aquí puedes agregar validación adicional si es necesario
-  artist: artistSchema,
-  duration: durationSchema,
+  cover: zod.string(),
+  artist: artistSchema.partial(),
+  duration: durationSchema.optional(),
   mediaId: zod.string(),
 });
 

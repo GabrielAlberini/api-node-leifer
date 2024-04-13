@@ -2,7 +2,7 @@
 GET http://127.0.0.1:3001/api/tracks
 
 ### Track
-GET http://127.0.0.1:3001/api/tracks/6619b5d2f61075d7818b1f95
+GET http://127.0.0.1:3001/api/tracks/661a864356647c4641535cf7
 
 ### Create track
 POST http://127.0.0.1:3001/api/tracks
@@ -26,13 +26,15 @@ Content-Type: application/json
 
 
 ### Update track
-PATCH http://127.0.0.1:3001/api/tracks/6619aeb2194dc754ca63a9
+PATCH http://127.0.0.1:3001/api/tracks/6619aeb2194dc754ca63a9ba
 Content-Type: application/json
 
-{  
-  "cover": "Lalala"
+{
+  "name": "Canción de ejemplo",
+  "artist": {
+    "name": "Artista de ejemplo",
+  }
 }
-
 
 ### Delete tracks
 DELETE  http://127.0.0.1:3001/api/tracks/6619b5d2f61075d7818b1f95

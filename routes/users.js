@@ -4,7 +4,7 @@ import {
   getItem,
   createItem,
   updateItem,
-  deletetItem,
+  deleteItem,
 } from "../controllers/users.js";
 
 const usersRouter = Router();
@@ -13,6 +13,6 @@ usersRouter.get("/", getItems);
 usersRouter.get("/:id", getItem);
 usersRouter.post("/", createItem);
 usersRouter.patch("/:id", updateItem);
-usersRouter.delete("/:id", deletetItem);
+usersRouter.delete("/:id", deleteItem);
 
 export default usersRouter;

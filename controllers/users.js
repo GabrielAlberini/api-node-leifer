@@ -56,6 +56,6 @@ const updateItem = (req, res) => {};
  * @param {*} req
  * @param {*} res
  */
-const deletetItem = (req, res) => {};
+const deleteItem = (req, res) => {};
 
-export { getItems, getItem, createItem, updateItem, deletetItem };
+export { getItems, getItem, createItem, updateItem, deleteItem };

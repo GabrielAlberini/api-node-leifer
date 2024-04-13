@@ -26,13 +26,13 @@ Content-Type: application/json
 
 
 ### Update track
-PATCH http://127.0.0.1:3001/api/tracks/6619aeb2194dc754ca63a9ba
+PATCH http://127.0.0.1:3001/api/tracks/6619aeb2194dc754ca63a
 Content-Type: application/json
 
 {
   "name": "Canción de ejemplo",
   "artist": {
-    "name": "Artista de ejemplo",
+    "name": "Artista de ejemplo"
   }
 }
 

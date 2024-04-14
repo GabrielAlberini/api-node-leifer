@@ -1,20 +1,35 @@
 import { TracksModel } from "../models/index.js";
 import { validateTrack, validatePartialTrack } from "../validators/tracks.js";
-
 /**
- * Obtiene una lista de items.
- * @param {Object} req - La solicitud HTTP.
- * @param {Object} res - La respuesta HTTP.
- * @param {Function} next - Función para llamar al siguiente middleware.
+ * Get a list of items.
+ * @param {Object} req - The HTTP request.
+ * @param {Object} res - The HTTP response.
+ * @param {Function} next - Function to call the next middleware.
  * @returns {Promise<void>}
- * @description Esta función obtiene una lista de registros de pistas de la base de datos.
- * Si la operación se realiza correctamente, se devolverá un objeto JSON que contiene la lista de pistas.
- * Si ocurre un error durante la operación, se pasará al siguiente middleware con el error.
+ * @description This function retrieves a list of track records from the database.
+ * If the operation is successful, it will return a JSON object containing the list of tracks.
+ * If an error occurs during the operation, it will pass to the next middleware with the error.
+ * The 'page' parameter in the HTTP request query is used to specify the page of results.
+ * If the 'page' parameter is not provided, it is assumed to be 1 by default.
+ * The function uses the TracksModel data model to search for records in the MongoDB database.
+ * Records are retrieved in batches of default size (5 tracks per page) using search options,
+ * such as 'skip' and 'limit', calculated from the 'page' parameter.
  */
-
 const getItems = async (req, res, next) => {
   try {
-    const data = await TracksModel.find({});
+    let { page } = req.query;
+
+    page = parseInt(page) || 1;
+    const limit = 5;
+
+    // Construir objeto de opciones de búsqueda para MongoDB
+    const options = {
+      skip: (page - 1) * limit,
+      limit,
+    };
+
+    const data = await TracksModel.find({}, null, options);
+
     res.json({ data });
   } catch (error) {
     next(error);
@@ -22,19 +37,18 @@ const getItems = async (req, res, next) => {
 };
 
 /**
- * Obtiene un detalle de un registro.
- * @param {Object} req - La solicitud HTTP.
- * @param {Object} res - La respuesta HTTP.
- * @param {Function} next - Función para llamar al siguiente middleware.
+ * Get details of a record.
+ * @param {Object} req - The HTTP request.
+ * @param {Object} res - The HTTP response.
+ * @param {Function} next - Function to call the next middleware.
  * @returns {Promise<void>}
- * @description Esta función obtiene el detalle de un registro de pista de la base de datos.
- * El parámetro `id` en la ruta de la solicitud debe ser el ID único del registro que se desea obtener.
- * Ejemplo de ruta de solicitud: '/tracks/6074e105ac83c317d0c2fd2a'
- * Si el registro existe, se devolverán sus datos en un objeto JSON.
- * Si el registro no existe, se devolverá un error de tipo 'NotFoundError' con un código de estado 404 (Not Found).
- * Si el ID proporcionado en la solicitud no es válido, se devolverá un error de tipo 'CastError' con un código de estado 400 (Bad Request).
+ * @description This function retrieves the details of a track record from the database.
+ * The `id` parameter in the request route should be the unique ID of the record to be retrieved.
+ * Example request route: '/tracks/6074e105ac83c317d0c2fd2a'
+ * If the record exists, its data will be returned in a JSON object.
+ * If the record does not exist, a 'NotFoundError' error will be returned with a status code of 404 (Not Found).
+ * If the ID provided in the request is not valid, a 'CastError' error will be returned with a status code of 400 (Bad Request).
  */
-
 const getItem = async (req, res, next) => {
   const { id } = req.params;
 
@@ -52,33 +66,33 @@ const getItem = async (req, res, next) => {
 };
 
 /**
- * Inserta un registro.
+ * Insert a record.
  * @param {Object} req
  * @param {Object} res
  * @param {Function} next
  * @returns {Promise<void>}
- * @description Esta función inserta un nuevo registro en la base de datos de tracks.
- * El cuerpo de la solicitud debe contener los siguientes campos:
- * - name: El nombre de la pista (String).
- * - album: El nombre del álbum al que pertenece la pista (String).
- * - cover: La URL de la portada del álbum (String).
- * - artist: Un objeto que contiene la información del artista de la pista, con los siguientes campos:
- *   - name: El nombre completo del artista (String).
- *   - nickname: El apodo o nombre artístico del artista (String).
- *   - nationality: La nacionalidad del artista (String).
- * - duration: Un objeto que contiene el inicio y el fin de la duración de la pista en segundos, con los siguientes campos:
- *   - start: El tiempo de inicio de la pista (Number).
- *   - end: El tiempo de fin de la pista (Number).
- * - mediaId: El ID de la media asociada a la pista (String).
- * Ejemplo de solicitud:
+ * @description This function inserts a new record into the tracks database.
+ * The request body must contain the following fields:
+ * - name: The name of the track (String).
+ * - album: The name of the album to which the track belongs (String).
+ * - cover: The URL of the album cover (String).
+ * - artist: An object containing information about the track artist, with the following fields:
+ *   - name: The full name of the artist (String).
+ *   - nickname: The artist's nickname or stage name (String).
+ *   - nationality: The nationality of the artist (String).
+ * - duration: An object containing the start and end of the track duration in seconds, with the following fields:
+ *   - start: The start time of the track (Number).
+ *   - end: The end time of the track (Number).
+ * - mediaId: The ID of the media associated with the track (String).
+ * Example request:
  * {
- *    "name": "Canción de ejemplo",
- *    "album": "Álbum de ejemplo",
+ *    "name": "Sample Song",
+ *    "album": "Sample Album",
  *    "cover": "https://example.com/cover.jpg",
  *    "artist": {
- *      "name": "Artista de ejemplo",
- *      "nickname": "Apodo de ejemplo",
- *      "nationality": "Nacionalidad de ejemplo"
+ *      "name": "Example Artist",
+ *      "nickname": "Example Nickname",
+ *      "nationality": "Example Nationality"
  *    },
  *    "duration": {
  *      "start": 0,
@@ -86,10 +100,9 @@ const getItem = async (req, res, next) => {
  *    },
  *    "mediaId": "6074e105ac83c317d0c2fd2a"
  * }
- * Si la solicitud es válida, se creará el registro en la base de datos y se devolverá un objeto JSON con los datos del nuevo registro.
- * Si la solicitud es inválida, se devolverá un error de validación con un código de estado 400 (Bad Request).
+ * If the request is valid, the record will be created in the database and a JSON object with the data of the new record will be returned.
+ * If the request is invalid, a validation error will be returned with a status code of 400 (Bad Request).
  */
-
 const createItem = async (req, res, next) => {
   try {
     const { body } = req;
@@ -107,26 +120,25 @@ const createItem = async (req, res, next) => {
 };
 
 /**
- * Actualiza un registro.
- * @param {Object} req - La solicitud HTTP.
- * @param {Object} res - La respuesta HTTP.
- * @param {Function} next - Función para llamar al siguiente middleware.
+ * Update a record.
+ * @param {Object} req - The HTTP request.
+ * @param {Object} res - The HTTP response.
+ * @param {Function} next - Function to call the next middleware.
  * @returns {Promise<void>}
- * @description Esta función actualiza un registro de pista en la base de datos.
- * El parámetro `id` en la ruta de la solicitud debe ser el ID único del registro que se desea actualizar.
- * El cuerpo de la solicitud debe contener los campos que se desean actualizar en el registro.
- * Ejemplo de ruta de solicitud: '/tracks/6074e105ac83c317d0c2fd2a'
- * Ejemplo de cuerpo de solicitud:
+ * @description This function updates a track record in the database.
+ * The `id` parameter in the request route should be the unique ID of the record to be updated.
+ * The request body should contain the fields to be updated in the record.
+ * Example request route: '/tracks/6074e105ac83c317d0c2fd2a'
+ * Example request body:
  * {
- *    "name": "Nuevo nombre de la pista",
- *    "album": "Nuevo nombre del álbum",
+ *    "name": "New track name",
+ *    "album": "New album name",
  *    ...
  * }
- * Si el registro se actualiza correctamente, se devolverán sus datos actualizados en un objeto JSON.
- * Si el registro no existe, se devolverá un error de tipo 'NotFoundError' con un código de estado 404 (Not Found).
- * Si el ID proporcionado en la solicitud no es válido, se devolverá un error de tipo 'CastError' con un código de estado 400 (Bad Request).
+ * If the record is successfully updated, its updated data will be returned in a JSON object.
+ * If the record does not exist, a 'NotFoundError' error will be returned with a status code of 404 (Not Found).
+ * If the ID provided in the request is not valid, a 'CastError' error will be returned with a status code of 400 (Bad Request).
  */
-
 const updateItem = async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
@@ -151,19 +163,18 @@ const updateItem = async (req, res, next) => {
 };
 
 /**
- * Elimina un registro.
- * @param {Object} req - La solicitud HTTP.
- * @param {Object} res - La respuesta HTTP.
- * @param {Function} next - Función para llamar al siguiente middleware.
+ * Delete a record.
+ * @param {Object} req - The HTTP request.
+ * @param {Object} res - The HTTP response.
+ * @param {Function} next - Function to call the next middleware.
  * @returns {Promise<void>}
- * @description Esta función elimina un registro de pista de la base de datos.
- * El parámetro `id` en la ruta de la solicitud debe ser el ID único del registro que se desea eliminar.
- * Ejemplo de ruta de solicitud: '/tracks/6074e105ac83c317d0c2fd2a'
- * Si el registro se elimina correctamente, se devolverán sus datos en un objeto JSON.
- * Si el registro no existe, se devolverá un error de tipo 'NotFoundError' con un código de estado 404 (Not Found).
- * Si el ID proporcionado en la solicitud no es válido, se devolverá un error de tipo 'CastError' con un código de estado 400 (Bad Request).
+ * @description This function deletes a track record from the database.
+ * The `id` parameter in the request route should be the unique ID of the record to be deleted.
+ * Example request route: '/tracks/6074e105ac83c317d0c2fd2a'
+ * If the record is deleted successfully, its data will be returned in a JSON object.
+ * If the record does not exist, a 'NotFoundError' error will be returned with a status code of 404 (Not Found).
+ * If the ID provided in the request is not valid, a 'CastError' error will be returned with a status code of 400 (Bad Request).
  */
-
 const deleteItem = async (req, res, next) => {
   const { id } = req.params;
 

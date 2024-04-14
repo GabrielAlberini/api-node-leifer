@@ -1,5 +1,5 @@
 ### Tracks
-GET http://127.0.0.1:3001/api/tracks
+GET http://127.0.0.1:3001/api/tracks/?page=3
 
 ### Track
 GET http://127.0.0.1:3001/api/tracks/661a864356647c4641535cf7
@@ -9,7 +9,7 @@ POST http://127.0.0.1:3001/api/tracks
 Content-Type: application/json
 
 {
-  "name": "Nombre de la Pista",
+  "name": "Otra nueva cancion",
   "album": "Nombre del Álbum",
   "cover": "URL de la Portada",
   "artist": {
@@ -26,7 +26,7 @@ Content-Type: application/json
 
 
 ### Update track
-PATCH http://127.0.0.1:3001/api/tracks/6619aeb2194dc754ca63a
+PATCH http://127.0.0.1:3001/api/tracks/6619aeb2194dc754ca63a9ba
 Content-Type: application/json
 
 {
@@ -37,4 +37,4 @@ Content-Type: application/json
 }
 
 ### Delete tracks
-DELETE  http://127.0.0.1:3001/api/tracks/6619b5d2f61075d7818b1f95
+DELETE  http://127.0.0.1:3001/api/tracks/6619aeb2194dc754ca63a9ba

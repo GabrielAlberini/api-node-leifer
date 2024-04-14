@@ -6,6 +6,7 @@ import morgan from "morgan";
 import { dbConnect } from "./config/mongo.js";
 import { indexRouter } from "./routes/index.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { sessionTimeClientHandler } from "./middlewares/sessionTimeClientHandler.js";
 
 dotenv.config();
 
@@ -19,7 +20,9 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 
-app.use("/api/", indexRouter);
+app.use("/api", sessionTimeClientHandler(1, 10));
+
+app.use("/api", indexRouter);
 app.use(errorHandler);
 
 app.listen(PORT, () => {

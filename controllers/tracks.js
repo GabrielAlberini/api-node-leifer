@@ -1,5 +1,5 @@
 import { TracksModel } from "../models/index.js";
-import { validateTrack, validatePartialTrack } from "../validators/tracks.js";
+
 /**
  * Get a list of items.
  * @param {Object} req - The HTTP request.
@@ -107,15 +107,6 @@ const createItem = async (req, res, next) => {
   try {
     const { body } = req;
 
-    const validate = validateTrack(body);
-
-    if (!validate.success) {
-      const error = new Error();
-      error.name = "ValidationBodyRequestError";
-      error.issues = validate.error.issues;
-      throw error;
-    }
-
     const newTrack = await TracksModel.create(body);
 
     res.status(201).json({ data: newTrack });
@@ -149,15 +140,6 @@ const updateItem = async (req, res, next) => {
   const { body } = req;
 
   try {
-    const validate = validatePartialTrack(body);
-
-    if (!validate.success) {
-      const error = new Error();
-      error.name = "ValidationBodyRequestError";
-      error.issues = validate.error.issues;
-      throw error;
-    }
-
     const updatedItem = await TracksModel.findByIdAndUpdate(id, body, {
       new: true,
     });

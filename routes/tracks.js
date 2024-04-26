@@ -6,13 +6,17 @@ import {
   updateItem,
   deleteItem,
 } from "../controllers/tracks.js";
+import {
+  validateResultsPartialTrack,
+  validateResultsTrack,
+} from "../utils/handleValidators.js";
 
 const tracksRouter = Router();
 
 tracksRouter.get("/", getItems);
 tracksRouter.get("/:id", getItem);
-tracksRouter.post("/", createItem);
-tracksRouter.patch("/:id", updateItem);
+tracksRouter.post("/", validateResultsTrack, createItem);
+tracksRouter.patch("/:id", validateResultsPartialTrack, updateItem);
 tracksRouter.delete("/:id", deleteItem);
 
 export default tracksRouter;

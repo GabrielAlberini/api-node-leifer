@@ -6,7 +6,7 @@ const { string, number, object } = zod;
 const trackSchema = object({
   name: string(),
   album: string(),
-  cover: string().url(),
+  cover: string(),
   artist: object({
     name: string(),
     nickname: string(),
@@ -23,7 +23,7 @@ const trackSchema = object({
 const partialTrackSchema = object({
   name: string(),
   album: string(),
-  cover: string().url(),
+  cover: string(),
   artist: object({
     name: string().optional(),
     nickname: string().optional(),

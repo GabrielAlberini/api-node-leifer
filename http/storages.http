@@ -4,14 +4,8 @@ GET http://127.0.0.1:3001/api/storages
 ### Storage
 GET http://127.0.0.1:3001/api/storages/1
 
-### Create storage
-POST http://127.0.0.1:3001/api/storages
-Content-Type: application/json
-
-{
-  "url": "Url del archivo",
-  "filename": "Nombre del archivo",
-}
+### Post file
+### En Postman para poder enviar achivos
 
 ### Update storage
 PATCH http://127.0.0.1:3001/api/storages/1

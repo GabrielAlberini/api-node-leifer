@@ -1,3 +1,5 @@
+export const EXT_FILES = ["png", "jgp", "webp"];
+
 export const errorMessages = {
   NOT_FOUND_ERROR: {
     name: "NotFoundError",
@@ -7,5 +9,9 @@ export const errorMessages = {
     name: "CastError",
     kind: "ObjectId",
     message: "ID inválido",
+  },
+  FILE_EXTENSION_ERROR: {
+    name: "FileExtensionError",
+    message: "File extension not allowed",
   },
 };

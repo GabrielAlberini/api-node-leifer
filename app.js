@@ -19,10 +19,12 @@ app.disable("x-powered-by");
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
+app.use(express.static("storage"));
 
 app.use("/api", sessionTimeClientHandler(1, 10));
 
 app.use("/api", indexRouter);
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {

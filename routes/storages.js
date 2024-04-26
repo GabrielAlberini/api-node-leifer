@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { uploadMiddleware } from "../utils/handleStorage.js";
 import {
   getItems,
   getItem,
@@ -11,7 +12,7 @@ const storagesRouter = Router();
 
 storagesRouter.get("/", getItems);
 storagesRouter.get("/:id", getItem);
-storagesRouter.post("/", createItem);
+storagesRouter.post("/", uploadMiddleware.single("file"), createItem);
 storagesRouter.patch("/:id", updateItem);
 storagesRouter.delete("/:id", deleteItem);
 

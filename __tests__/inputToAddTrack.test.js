@@ -25,8 +25,9 @@ describe("validateTrack function", () => {
 
   test("should return success true when partial track data is valid", () => {
     const partialTrackData = {
-      name: "Artista de ejemplo",
-      album: "Album de ejemplo",
+      duration: {
+        start: 0,
+      },
     };
 
     const validationResult = validatePartialTrack(partialTrackData);

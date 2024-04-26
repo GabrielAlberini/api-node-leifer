@@ -1,23 +1,39 @@
 import zod from "zod";
 
-const artistSchema = zod.object({
-  name: zod.string(),
-  nickname: zod.string(),
-  nationality: zod.string(),
+const { string, number, object } = zod;
+
+// Define el esquema de un track completo
+const trackSchema = object({
+  name: string(),
+  album: string(),
+  cover: string().url(),
+  artist: object({
+    name: string(),
+    nickname: string(),
+    nationality: string(),
+  }),
+  duration: object({
+    start: number(),
+    end: number(),
+  }),
+  mediaId: string(),
 });
 
-const durationSchema = zod.object({
-  start: zod.number().int(),
-  end: zod.number().int(),
-});
-
-const trackSchema = zod.object({
-  name: zod.string(),
-  album: zod.string(),
-  cover: zod.string(),
-  artist: artistSchema,
-  duration: durationSchema,
-  mediaId: zod.string(),
+// Define el esquema para la validación parcial de un track
+const partialTrackSchema = object({
+  name: string(),
+  album: string(),
+  cover: string().url(),
+  artist: object({
+    name: string().optional(),
+    nickname: string().optional(),
+    nationality: string().optional(),
+  }),
+  duration: object({
+    start: number().optional(),
+    end: number().optional(),
+  }),
+  mediaId: string(),
 });
 
 const validateTrack = (objTrack) => {
@@ -26,7 +42,7 @@ const validateTrack = (objTrack) => {
 };
 
 const validatePartialTrack = (objTrack) => {
-  const validationResult = trackSchema.partial().safeParse(objTrack);
+  const validationResult = partialTrackSchema.partial().safeParse(objTrack);
   return validationResult;
 };
 

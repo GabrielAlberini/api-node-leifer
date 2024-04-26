@@ -148,11 +148,16 @@ const updateItem = async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
 
-  const validate = validatePartialTrack(body);
-  if (!validate.success)
-    return res.status(400).json({ error: validate.error.issues });
-
   try {
+    const validate = validatePartialTrack(body);
+
+    if (!validate.success) {
+      const error = new Error();
+      error.name = "ValidationBodyRequestError";
+      error.issues = validate.error.issues;
+      throw error;
+    }
+
     const updatedItem = await TracksModel.findByIdAndUpdate(id, body, {
       new: true,
     });
@@ -161,6 +166,7 @@ const updateItem = async (req, res, next) => {
       error.name = "NotFoundError";
       throw error;
     }
+
     res.json({ data: updatedItem });
   } catch (error) {
     next(error);

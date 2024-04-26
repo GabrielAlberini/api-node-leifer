@@ -15,8 +15,8 @@ const trackSchema = zod.object({
   name: zod.string(),
   album: zod.string(),
   cover: zod.string(),
-  artist: artistSchema.partial(),
-  duration: durationSchema.optional(),
+  artist: artistSchema,
+  duration: durationSchema,
   mediaId: zod.string(),
 });
 

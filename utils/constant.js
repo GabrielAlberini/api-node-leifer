@@ -14,4 +14,7 @@ export const errorMessages = {
     name: "FileExtensionError",
     message: "File extension not allowed",
   },
+  VALIDATION_BODY_REQUEST_ERROR: {
+    name: "ValidationBodyRequestError",
+  },
 };

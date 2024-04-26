@@ -1,13 +1,22 @@
 import { errorMessages } from "../utils/constant.js";
-const { NOT_FOUND_ERROR, CAST_ERROR, FILE_EXTENSION_ERROR } = errorMessages;
+const {
+  NOT_FOUND_ERROR,
+  CAST_ERROR,
+  FILE_EXTENSION_ERROR,
+  VALIDATION_BODY_REQUEST_ERROR,
+} = errorMessages;
 
 export const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
 
-  const { name, kind } = err;
+  const { name, kind, issues } = err;
 
   if (name === NOT_FOUND_ERROR.name) {
     return res.status(400).json({ error: NOT_FOUND_ERROR.message });
+  }
+
+  if (name === VALIDATION_BODY_REQUEST_ERROR.name) {
+    return res.status(400).json({ error: issues });
   }
 
   if (name === CAST_ERROR.name && kind === CAST_ERROR.kind) {

@@ -2,30 +2,58 @@ import { StoragesModel } from "../models/index.js";
 const PUBLIC_ULR = process.env.PUBLIC_URL;
 
 /**
- * Obtener lista de items
- * @param {*} req
- * @param {*} res
+ * Retrieves a list of items from the database.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Promise<void>} - A promise that resolves when the list of items is retrieved successfully, or rejects with an error.
  */
-const getItems = (req, res) => {
-  res.json({ a: 1 });
+const getItems = async (req, res, next) => {
+  try {
+    const data = await StoragesModel.find({});
+    res.json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
 
 /**
- * Obtener un detalle de un registro
- * @param {*} req
- * @param {*} res
+ * Retrieves a single item from the StoragesModel by its ID.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Promise<void>} - A promise that resolves when the item is retrieved successfully, or rejects with an error.
+ * @throws {NotFoundError} - If the item with the specified ID does not exist.
  */
-const getItem = (req, res) => {};
+const getItem = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const data = await StoragesModel.findById(id);
+    if (!data) {
+      const error = new Error();
+      error.name = "NotFoundError";
+      throw error;
+    }
+    res.json({ data });
+  } catch (error) {
+    next(error);
+  }
+};
 
 /**
- * Insertar un registro
- * @param {*} req
- * @param {*} res
+ * Insert a new file into the StoragesModel.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Promise<void>} - A promise that resolves when the file is inserted successfully.
+ * @throws {Error} - If there is an error inserting the file.
  */
 const createItem = async (req, res, next) => {
+  const { file } = req;
   try {
-    const { file } = req;
-
     const newFile = {
       filename: file.filename,
       url: `${PUBLIC_ULR}/${file.filename}`,

@@ -53,7 +53,7 @@ const getItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const item = await TracksModel.findById(id).exec();
+    const item = await TracksModel.findById(id);
     if (!item) {
       const error = new Error();
       error.name = "NotFoundError";
@@ -109,10 +109,15 @@ const createItem = async (req, res, next) => {
 
     const validate = validateTrack(body);
 
-    if (!validate.success)
-      return res.status(400).json({ error: validate.error.issues });
+    if (!validate.success) {
+      const error = new Error();
+      error.name = "ValidationBodyRequestError";
+      error.issues = validate.error.issues;
+      throw error;
+    }
 
     const newTrack = await TracksModel.create(body);
+
     res.status(201).json({ data: newTrack });
   } catch (error) {
     next(error);

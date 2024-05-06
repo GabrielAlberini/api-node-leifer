@@ -7,13 +7,5 @@ GET http://127.0.0.1:3001/api/storages/1
 ### Post file
 ### En Postman para poder enviar achivos
 
-### Update storage
-PATCH http://127.0.0.1:3001/api/storages/1
-Content-Type: application/json
-
-{
-  "age": 26
-}
-
 ### Delete storage
-DELETE  http://127.0.0.1:3001/api/storages/663918fb29f44e6e39569ad8
+DELETE  http://127.0.0.1:3001/api/storages/6639317c1349f79fbf84dc51

@@ -1,5 +1,13 @@
 import { StoragesModel } from "../models/index.js";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import fs from "fs/promises";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const PUBLIC_ULR = process.env.PUBLIC_URL;
+const MEDIA_PATH = `${__dirname}/../storage`;
 
 /**
  * Retrieves a list of items from the database.
@@ -68,30 +76,37 @@ const createItem = async (req, res, next) => {
 };
 
 /**
- * Actualizar un registro
- * @param {*} req
- * @param {*} res
- */
-const updateItem = (req, res) => {};
-
-/**
  * Borrar un registro
  * @param {*} req
  * @param {*} res
  */
-const deleteItem = async (req, res) => {
+const deleteItem = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const deletedItem = await StoragesModel.delete({ _id: id });
-    if (!deletedItem) {
+    const file = await StoragesModel.findById(id);
+
+    if (!file) {
       const error = new Error();
       error.name = "NotFoundError";
       throw error;
     }
-    res.json({ data: deletedItem });
+
+    const filePath = join(MEDIA_PATH, file.filename);
+
+    //The unlink function is used to remove a file from the file system.
+    fs.unlink(filePath);
+
+    await StoragesModel.delete({ _id: id });
+
+    res.json({
+      data: {
+        filePath,
+        delete: 1,
+      },
+    });
   } catch (error) {
     next(error);
   }
 };
 
-export { getItems, getItem, createItem, updateItem, deleteItem };
+export { getItems, getItem, createItem, deleteItem };

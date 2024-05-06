@@ -76,9 +76,12 @@ const createItem = async (req, res, next) => {
 };
 
 /**
- * Borrar un registro
- * @param {*} req
- * @param {*} res
+ * Delete an item from the storage by ID.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @return {Promise<void>} - A promise that resolves when the item is deleted successfully.
  */
 const deleteItem = async (req, res, next) => {
   const { id } = req.params;

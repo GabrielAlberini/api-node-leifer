@@ -1,4 +1,4 @@
-export const EXT_FILES = ["png", "jgp", "webp"];
+export const EXT_FILES = ["mp3", "wav", "aiff", "aac", "flac", "ogg", "m4a"];
 
 export const errorMessages = {
   NOT_FOUND_ERROR: {

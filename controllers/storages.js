@@ -79,6 +79,19 @@ const updateItem = (req, res) => {};
  * @param {*} req
  * @param {*} res
  */
-const deleteItem = (req, res) => {};
+const deleteItem = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedItem = await StoragesModel.delete({ _id: id });
+    if (!deletedItem) {
+      const error = new Error();
+      error.name = "NotFoundError";
+      throw error;
+    }
+    res.json({ data: deletedItem });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export { getItems, getItem, createItem, updateItem, deleteItem };

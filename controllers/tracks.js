@@ -1,3 +1,4 @@
+import { errorHandler } from "../middlewares/errorHandler.js";
 import { TracksModel } from "../models/index.js";
 
 /**
@@ -106,6 +107,7 @@ const getItem = async (req, res, next) => {
 const createItem = async (req, res, next) => {
   try {
     const { body } = req;
+    console.log(body);
 
     const newTrack = await TracksModel.create(body);
 
@@ -172,7 +174,7 @@ const deleteItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const deletedItem = await TracksModel.findByIdAndDelete(id);
+    const deletedItem = await TracksModel.delete({ _id: id });
     if (!deletedItem) {
       const error = new Error();
       error.name = "NotFoundError";

@@ -1,8 +1,8 @@
 ### Tracks
-GET http://127.0.0.1:3001/api/tracks/?page=3
+GET http://127.0.0.1:3001/api/tracks/
 
 ### Track
-GET http://127.0.0.1:3001/api/tracks/661a864356647c4641535cf7
+GET http://127.0.0.1:3001/api/tracks/661aa8d64ccc5993f067b046
 
 ### Create track
 POST http://127.0.0.1:3001/api/tracks
@@ -37,4 +37,4 @@ Content-Type: application/json
 }
 
 ### Delete tracks
-DELETE  http://127.0.0.1:3001/api/tracks/6619aeb2194dc754ca63a9ba
+DELETE  http://127.0.0.1:3001/api/tracks/6639190f29f44e6e39569ada

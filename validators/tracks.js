@@ -20,21 +20,7 @@ const trackSchema = object({
 });
 
 // Define el esquema para la validación parcial de un track
-const partialTrackSchema = object({
-  name: string(),
-  album: string(),
-  cover: string(),
-  artist: object({
-    name: string().optional(),
-    nickname: string().optional(),
-    nationality: string().optional(),
-  }),
-  duration: object({
-    start: number().optional(),
-    end: number().optional(),
-  }),
-  mediaId: string(),
-});
+const partialTrackSchema = trackSchema.deepPartial();
 
 const validateTrack = (objTrack) => {
   const validationResult = trackSchema.safeParse(objTrack);
@@ -42,7 +28,7 @@ const validateTrack = (objTrack) => {
 };
 
 const validatePartialTrack = (objTrack) => {
-  const validationResult = partialTrackSchema.partial().safeParse(objTrack);
+  const validationResult = partialTrackSchema.safeParse(objTrack);
   return validationResult;
 };
 

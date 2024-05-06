@@ -16,4 +16,4 @@ Content-Type: application/json
 }
 
 ### Delete storage
-DELETE  http://127.0.0.1:3001/api/storages/1
+DELETE  http://127.0.0.1:3001/api/storages/663918fb29f44e6e39569ad8

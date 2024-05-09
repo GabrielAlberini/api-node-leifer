@@ -1,8 +1,10 @@
 import { tokenValidate } from "../utils/handleJwt.js";
 import { UsersModel } from "../models/index.js";
+import { handleError } from "../utils/handleError.js";
 
 const authMiddleware = async (req, res, next) => {
   const header = req.headers.authorization;
+
   if (!header) {
     const error = new Error();
     error.name = "InvalidToken";
@@ -25,7 +27,7 @@ const authMiddleware = async (req, res, next) => {
 
     next();
   } catch (error) {
-    next(error);
+    handleError(res, error);
   }
 };
 

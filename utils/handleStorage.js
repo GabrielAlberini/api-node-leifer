@@ -2,7 +2,7 @@ import multer from "multer";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import crypto from "node:crypto";
-import { EXT_FILES } from "../utils/constant.js";
+import { EXT_FILES } from "../utils/constants.js";
 
 // Obtiene el directorio actual del módulo
 const __filename = fileURLToPath(import.meta.url);

@@ -7,6 +7,7 @@ import { dbConnect } from "./config/mongo.js";
 import { indexRouter } from "./routes/index.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { sessionTimeClientHandler } from "./middlewares/sessionTimeClientHandler.js";
+import e from "express";
 
 dotenv.config();
 
@@ -25,7 +26,9 @@ app.use("/api", sessionTimeClientHandler(1, 10));
 
 app.use("/api", indexRouter);
 
-app.use(errorHandler);
+app.use("*", (req, res) => {
+  res.status(404).json({ error: "404 - Not found" });
+});
 
 app.listen(PORT, () => {
   dbConnect();

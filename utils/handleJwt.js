@@ -21,10 +21,8 @@ const tokenValidate = async (token) => {
   } catch (err) {
     if (err instanceof jwt.JsonWebTokenError) {
       const error = new Error();
-      error.message = "InvalidToken";
+      error.name = "InvalidToken";
       throw error;
-    } else {
-      throw err;
     }
   }
 };

@@ -1,6 +1,6 @@
 ### Tracks
 GET http://127.0.0.1:3001/api/tracks/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNjZWMzODU4OWFiZWNmYjE3Nzc0YzkiLCJyb2xlIjpbImFkbWluIl0sImlhdCI6MTcxNTI3NTIzOCwiZXhwIjoxNzE1MjgyNDM4fQ.FPyfcxjjBksZ18CSU5hqG4IusxDSEZ3KwKdkgifRpUw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNjZWMzODU4OWFiZWNmYjE3Nzc0YzkiLCJyb2xlIjpbImFkbWluIl0sImlhdCI6MTcxNTI4NTg4MywiZXhwIjoxNzE1MjkzMDgzfQ.tMeepu30Qc0RVTYxo3Oi6M6DwRIFuhWmMA8vQoEuKAM
 
 ### Track
 GET http://127.0.0.1:3001/api/tracks/661aa8d64ccc5993f067b046
@@ -27,7 +27,7 @@ Content-Type: application/json
 
 
 ### Update track
-PATCH http://127.0.0.1:3001/api/tracks/6619aeb2194dc754ca63a9ba
+PATCH http://127.0.0.1:3001/api/tracks/663d0f8aa6b758af3f95b094
 Content-Type: application/json
 
 {
@@ -38,4 +38,4 @@ Content-Type: application/json
 }
 
 ### Delete tracks
-DELETE  http://127.0.0.1:3001/api/tracks/6639190f29f44e6e39569ada
+DELETE  http://127.0.0.1:3001/api/tracks/663d0f8aa6b758af3f95b094

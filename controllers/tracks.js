@@ -1,22 +1,21 @@
-import { errorHandler } from "../middlewares/errorHandler.js";
 import { TracksModel } from "../models/index.js";
+import { handleError } from "../utils/handleError.js";
+import { validatePartialTrack, validateTrack } from "../validators/tracks.js";
 
 /**
  * Get a list of items.
  * @param {Object} req - The HTTP request.
  * @param {Object} res - The HTTP response.
- * @param {Function} next - Function to call the next middleware.
  * @returns {Promise<void>}
  * @description This function retrieves a list of track records from the database.
  * If the operation is successful, it will return a JSON object containing the list of tracks.
- * If an error occurs during the operation, it will pass to the next middleware with the error.
  * The 'page' parameter in the HTTP request query is used to specify the page of results.
  * If the 'page' parameter is not provided, it is assumed to be 1 by default.
  * The function uses the TracksModel data model to search for records in the MongoDB database.
  * Records are retrieved in batches of default size (5 tracks per page) using search options,
  * such as 'skip' and 'limit', calculated from the 'page' parameter.
  */
-const getItems = async (req, res, next) => {
+const getItems = async (req, res) => {
   try {
     let { page } = req.query;
     const { user } = req;
@@ -34,7 +33,7 @@ const getItems = async (req, res, next) => {
 
     res.json({ data, user });
   } catch (error) {
-    next(error);
+    handleError(res, error);
   }
 };
 
@@ -42,7 +41,6 @@ const getItems = async (req, res, next) => {
  * Get details of a record.
  * @param {Object} req - The HTTP request.
  * @param {Object} res - The HTTP response.
- * @param {Function} next - Function to call the next middleware.
  * @returns {Promise<void>}
  * @description This function retrieves the details of a track record from the database.
  * The `id` parameter in the request route should be the unique ID of the record to be retrieved.
@@ -51,7 +49,7 @@ const getItems = async (req, res, next) => {
  * If the record does not exist, a 'NotFoundError' error will be returned with a status code of 404 (Not Found).
  * If the ID provided in the request is not valid, a 'CastError' error will be returned with a status code of 400 (Bad Request).
  */
-const getItem = async (req, res, next) => {
+const getItem = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -63,7 +61,7 @@ const getItem = async (req, res, next) => {
     }
     res.json({ data: item });
   } catch (error) {
-    next(error);
+    handleError(res, error);
   }
 };
 
@@ -71,7 +69,6 @@ const getItem = async (req, res, next) => {
  * Insert a record.
  * @param {Object} req
  * @param {Object} res
- * @param {Function} next
  * @returns {Promise<void>}
  * @description This function inserts a new record into the tracks database.
  * The request body must contain the following fields:
@@ -105,16 +102,22 @@ const getItem = async (req, res, next) => {
  * If the request is valid, the record will be created in the database and a JSON object with the data of the new record will be returned.
  * If the request is invalid, a validation error will be returned with a status code of 400 (Bad Request).
  */
-const createItem = async (req, res, next) => {
+const createItem = async (req, res) => {
   try {
     const { body } = req;
-    console.log(body);
+    const validate = validateTrack(body);
+    if (!validate.success) {
+      const error = new Error();
+      error.name = "ValidationBodyRequestError";
+      error.issues = validate.error.issues;
+      throw error;
+    }
 
     const newTrack = await TracksModel.create(body);
 
     res.status(201).json({ data: newTrack });
   } catch (error) {
-    next(error);
+    handleError(res, error);
   }
 };
 
@@ -122,7 +125,6 @@ const createItem = async (req, res, next) => {
  * Update a record.
  * @param {Object} req - The HTTP request.
  * @param {Object} res - The HTTP response.
- * @param {Function} next - Function to call the next middleware.
  * @returns {Promise<void>}
  * @description This function updates a track record in the database.
  * The `id` parameter in the request route should be the unique ID of the record to be updated.
@@ -138,14 +140,23 @@ const createItem = async (req, res, next) => {
  * If the record does not exist, a 'NotFoundError' error will be returned with a status code of 404 (Not Found).
  * If the ID provided in the request is not valid, a 'CastError' error will be returned with a status code of 400 (Bad Request).
  */
-const updateItem = async (req, res, next) => {
+const updateItem = async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-
   try {
+    const validate = validatePartialTrack(body);
+
+    if (!validate.success) {
+      const error = new Error();
+      error.name = "ValidationBodyRequestError";
+      error.issues = validate.error.issues;
+      throw error;
+    }
+
     const updatedItem = await TracksModel.findByIdAndUpdate(id, body, {
       new: true,
     });
+
     if (!updatedItem) {
       const error = new Error();
       error.name = "NotFoundError";
@@ -154,7 +165,7 @@ const updateItem = async (req, res, next) => {
 
     res.json({ data: updatedItem });
   } catch (error) {
-    next(error);
+    handleError(res, error);
   }
 };
 
@@ -162,7 +173,6 @@ const updateItem = async (req, res, next) => {
  * Delete a record.
  * @param {Object} req - The HTTP request.
  * @param {Object} res - The HTTP response.
- * @param {Function} next - Function to call the next middleware.
  * @returns {Promise<void>}
  * @description This function deletes a track record from the database.
  * The `id` parameter in the request route should be the unique ID of the record to be deleted.
@@ -171,7 +181,7 @@ const updateItem = async (req, res, next) => {
  * If the record does not exist, a 'NotFoundError' error will be returned with a status code of 404 (Not Found).
  * If the ID provided in the request is not valid, a 'CastError' error will be returned with a status code of 400 (Bad Request).
  */
-const deleteItem = async (req, res, next) => {
+const deleteItem = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -183,7 +193,7 @@ const deleteItem = async (req, res, next) => {
     }
     res.json({ data: deletedItem });
   } catch (error) {
-    next(error);
+    handleError(res, error);
   }
 };
 

@@ -1,5 +1,6 @@
 ### Tracks
 GET http://127.0.0.1:3001/api/tracks/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNjZWMzODU4OWFiZWNmYjE3Nzc0YzkiLCJyb2xlIjpbImFkbWluIl0sImlhdCI6MTcxNTI3NTIzOCwiZXhwIjoxNzE1MjgyNDM4fQ.FPyfcxjjBksZ18CSU5hqG4IusxDSEZ3KwKdkgifRpUw
 
 ### Track
 GET http://127.0.0.1:3001/api/tracks/661aa8d64ccc5993f067b046

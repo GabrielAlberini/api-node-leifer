@@ -4,6 +4,8 @@ const {
   CAST_ERROR,
   FILE_EXTENSION_ERROR,
   VALIDATION_BODY_REQUEST_ERROR,
+  MONGO_SERVER_ERROR,
+  INVALID_TOKEN,
 } = errorMessages;
 
 export const errorHandler = (err, req, res, next) => {
@@ -25,6 +27,14 @@ export const errorHandler = (err, req, res, next) => {
 
   if (name === FILE_EXTENSION_ERROR.name) {
     return res.status(400).json({ error: FILE_EXTENSION_ERROR.message });
+  }
+
+  if (name === MONGO_SERVER_ERROR.name) {
+    return res.status(400).json({ error: MONGO_SERVER_ERROR.message });
+  }
+
+  if (name === INVALID_TOKEN.name) {
+    return res.status(403).json({ error: INVALID_TOKEN.message });
   }
 
   // Otros errores internos del servidor

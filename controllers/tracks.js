@@ -19,6 +19,7 @@ import { TracksModel } from "../models/index.js";
 const getItems = async (req, res, next) => {
   try {
     let { page } = req.query;
+    const { user } = req;
 
     page = parseInt(page) || 1;
     const limit = 5;
@@ -31,7 +32,7 @@ const getItems = async (req, res, next) => {
 
     const data = await TracksModel.find({}, null, options);
 
-    res.json({ data });
+    res.json({ data, user });
   } catch (error) {
     next(error);
   }

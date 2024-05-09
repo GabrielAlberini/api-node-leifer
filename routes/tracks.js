@@ -10,10 +10,11 @@ import {
   validateResultsPartialTrack,
   validateResultsTrack,
 } from "../utils/handleValidators.js";
+import { authMiddleware } from "../middlewares/sesion.js";
 
 const tracksRouter = Router();
 
-tracksRouter.get("/", getItems);
+tracksRouter.get("/", authMiddleware, getItems);
 tracksRouter.get("/:id", getItem);
 tracksRouter.post("/", validateResultsTrack, createItem);
 tracksRouter.patch("/:id", validateResultsPartialTrack, updateItem);

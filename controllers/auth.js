@@ -2,18 +2,23 @@ import { UsersModel } from "../models/index.js";
 import { encrypt, compare } from "../utils/handlePassword.js";
 import { tokenSign } from "../utils/handleJwt.js";
 import { validatePartialUser, validateUser } from "../validators/users.js";
+import { handleError } from "../utils/handleError.js";
+import { throwError } from "../utils/templateError.js";
 
-const register = async (req, res, next) => {
+const register = async (req, res) => {
   {
     const { body } = req;
 
     try {
       const validate = validateUser(body);
       if (!validate.success) {
-        const error = new Error();
-        error.name = "ValidationBodyRequestError";
-        error.issues = validate.error.issues;
-        throw error;
+        const { issues } = validate.error;
+        throwError(
+          "Error to body data request",
+          "ValidationBodyRequestError",
+          400,
+          issues
+        );
       }
 
       const { name, age, email, password, role } = body;
@@ -35,22 +40,23 @@ const register = async (req, res, next) => {
 
       res.json({ token, data: newUser });
     } catch (error) {
-      console.log(error.name);
-      next(error);
+      handleError(res, error);
     }
   }
 };
 
-const login = async (req, res, next) => {
+const login = async (req, res) => {
   const { body } = req;
 
   try {
     const validate = validatePartialUser(body);
     if (!validate.success) {
-      const error = new Error();
-      error.name = "ValidationBodyRequestError";
-      error.issues = validate.error.issues;
-      throw error;
+      throwError(
+        "Error to body data request",
+        "ValidationBodyRequestError",
+        400,
+        issues
+      );
     }
 
     const { email, password } = body;
@@ -60,17 +66,13 @@ const login = async (req, res, next) => {
     );
 
     if (!user) {
-      const error = new Error();
-      error.name = "UserNotFound";
-      throw error;
+      throwError("User not found", "NotFoundError", 404);
     }
 
     const validPassword = await compare(password, user.password);
 
     if (!validPassword) {
-      const error = new Error();
-      error.name = "InvalidPassword";
-      throw error;
+      throwError("Invalid password", "InvalidPassword", 400);
     }
 
     const token = await tokenSign(user);
@@ -79,7 +81,7 @@ const login = async (req, res, next) => {
 
     res.json({ token, data: user });
   } catch (error) {
-    next(error);
+    handleError(res, error);
   }
 };
 

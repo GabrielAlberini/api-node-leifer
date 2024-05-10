@@ -3,10 +3,9 @@ POST http://127.0.0.1:3001/api/auth/register
 Content-Type: application/json
 
 {
-  "name": "gabrielalberini",
   "age": 29,
-  "email": "gabialberini1@gmail.com",
-  "password": "123prueba",
+  "email": "test@gmail.com",
+  "password": "",
   "role": "admin"
 }
 
@@ -15,6 +14,6 @@ POST http://localhost:3001/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "gabialberini1@gmail.com",
+  "email": "test@gmail.com",
   "password": "123prueba"
 }

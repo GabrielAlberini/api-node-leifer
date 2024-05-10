@@ -1,7 +1,9 @@
 import { StoragesModel } from "../models/index.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { handleError } from "../utils/handleError.js";
 import fs from "fs/promises";
+import { throwError } from "../utils/templateError.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,15 +16,14 @@ const MEDIA_PATH = `${__dirname}/../storage`;
  *
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
  * @return {Promise<void>} - A promise that resolves when the list of items is retrieved successfully, or rejects with an error.
  */
-const getItems = async (req, res, next) => {
+const getItems = async (req, res) => {
   try {
     const data = await StoragesModel.find({});
     res.json({ data });
   } catch (error) {
-    next(error);
+    handleError(res, error);
   }
 };
 
@@ -31,22 +32,19 @@ const getItems = async (req, res, next) => {
  *
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
  * @return {Promise<void>} - A promise that resolves when the item is retrieved successfully, or rejects with an error.
  * @throws {NotFoundError} - If the item with the specified ID does not exist.
  */
-const getItem = async (req, res, next) => {
+const getItem = async (req, res) => {
   const { id } = req.params;
   try {
     const data = await StoragesModel.findById(id);
     if (!data) {
-      const error = new Error();
-      error.name = "NotFoundError";
-      throw error;
+      throwError("Storage not found", "NotFoundError", 404);
     }
     res.json({ data });
   } catch (error) {
-    next(error);
+    handleError(res, error);
   }
 };
 
@@ -55,11 +53,10 @@ const getItem = async (req, res, next) => {
  *
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
  * @return {Promise<void>} - A promise that resolves when the file is inserted successfully.
  * @throws {Error} - If there is an error inserting the file.
  */
-const createItem = async (req, res, next) => {
+const createItem = async (req, res) => {
   const { file } = req;
   try {
     const newFile = {
@@ -71,7 +68,7 @@ const createItem = async (req, res, next) => {
 
     res.json({ data });
   } catch (error) {
-    next(error);
+    handleError(res, error);
   }
 };
 
@@ -80,18 +77,15 @@ const createItem = async (req, res, next) => {
  *
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
  * @return {Promise<void>} - A promise that resolves when the item is deleted successfully.
  */
-const deleteItem = async (req, res, next) => {
+const deleteItem = async (req, res) => {
   const { id } = req.params;
   try {
     const file = await StoragesModel.findById(id);
 
     if (!file) {
-      const error = new Error();
-      error.name = "NotFoundError";
-      throw error;
+      throwError("Storage not found", "NotFoundError", 404);
     }
 
     const filePath = join(MEDIA_PATH, file.filename);
@@ -104,11 +98,11 @@ const deleteItem = async (req, res, next) => {
     res.json({
       data: {
         filePath,
-        delete: 1,
+        delete: true,
       },
     });
   } catch (error) {
-    next(error);
+    handleError(res, error);
   }
 };
 

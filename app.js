@@ -5,9 +5,7 @@ import morgan from "morgan";
 
 import { dbConnect } from "./config/mongo.js";
 import { indexRouter } from "./routes/index.js";
-import { errorHandler } from "./middlewares/errorHandler.js";
 import { sessionTimeClientHandler } from "./middlewares/sessionTimeClientHandler.js";
-import e from "express";
 
 dotenv.config();
 
@@ -27,7 +25,7 @@ app.use("/api", sessionTimeClientHandler(1, 10));
 app.use("/api", indexRouter);
 
 app.use("*", (req, res) => {
-  res.status(404).json({ error: "404 - Not found" });
+  res.status(404).json({ error: { code: 404, message: "Not found resourse" } });
 });
 
 app.listen(PORT, () => {

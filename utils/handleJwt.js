@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { throwError } from "../utils/templateError.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -10,9 +11,7 @@ const tokenSign = async (user) => {
 
 const tokenValidate = async (token) => {
   if (token === null || token === undefined) {
-    const error = new Error();
-    error.message = "InvalidToken";
-    throw error;
+    throwError("Token is required for access", "InvalidToken", 403);
   }
 
   try {
@@ -20,9 +19,7 @@ const tokenValidate = async (token) => {
     return validator;
   } catch (err) {
     if (err instanceof jwt.JsonWebTokenError) {
-      const error = new Error();
-      error.name = "InvalidToken";
-      throw error;
+      throwError("Invalid token", "InvalidToken", 403);
     }
   }
 };

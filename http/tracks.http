@@ -1,6 +1,6 @@
 ### Tracks
 GET http://127.0.0.1:3001/api/tracks/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNjZWMzODU4OWFiZWNmYjE3Nzc0YzkiLCJyb2xlIjpbImFkbWluIl0sImlhdCI6MTcxNTI4NTg4MywiZXhwIjoxNzE1MjkzMDgzfQ.tMeepu30Qc0RVTYxo3Oi6M6DwRIFuhWmMA8vQoEuKAM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNlNzE3YTQ3N2I3M2VmMzZhODI4MmEiLCJyb2xlIjpbImFkbWluIl0sImlhdCI6MTcxNTM3Mjc1MCwiZXhwIjoxNzE1Mzc5OTUwfQ.gA7rWFtZ2YKwTcp5ZxwaXY4ffxdbsqqEsyae2GmuX2I
 
 ### Track
 GET http://127.0.0.1:3001/api/tracks/661aa8d64ccc5993f067b046

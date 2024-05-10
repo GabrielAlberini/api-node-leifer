@@ -3,6 +3,8 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import crypto from "node:crypto";
 import { EXT_FILES } from "../utils/constants.js";
+import { handleError } from "../utils/handleError.js";
+import { throwError } from "../utils/templateError.js";
 
 // Obtiene el directorio actual del módulo
 const __filename = fileURLToPath(import.meta.url);
@@ -14,24 +16,35 @@ const storage = multer.diskStorage({
     cb(null, pathStorage);
   },
   filename: (req, file, cb) => {
-    const id = crypto.randomUUID();
-
     const ext = file.originalname.split(".").pop();
+    const isValidExtension = EXT_FILES.includes(ext);
 
-    if (EXT_FILES.includes(ext)) {
+    if (!isValidExtension) {
+      try {
+        throwError("Invalid file extension", "FileExtensionError", 400);
+      } catch (error) {
+        cb(error);
+      }
+    } else {
+      const id = crypto.randomUUID();
       const filename = `file-${id}.${ext}`;
       cb(null, filename);
-    } else {
-      const error = new Error();
-      error.name = "FileExtensionError";
-      error.statusCode = 400;
-      cb(error);
     }
   },
 });
 
-const uploadMiddleware = multer({
-  storage,
-});
+// Configurar multer con el almacenamiento definido
+const uploadFile = multer({ storage });
+
+const uploadMiddleware = (req, res, next) => {
+  uploadFile.single("file")(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      return next(err);
+    } else if (err) {
+      return handleError(res, err);
+    }
+    next();
+  });
+};
 
 export { uploadMiddleware };

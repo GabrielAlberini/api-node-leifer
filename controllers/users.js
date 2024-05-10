@@ -1,5 +1,7 @@
 import { UsersModel } from "../models/index.js";
+import { handleError } from "../utils/handleError.js";
 import { validateUser, validatePartialUser } from "../validators/users.js";
+import { throwError } from "../utils/templateError.js";
 
 /**
  * Obtener lista de items
@@ -27,20 +29,18 @@ const createItem = async (req, res) => {
     const validate = validateUser(body);
 
     if (!validate.success) {
-      return res.status(400).json({ error: validate.error.issues });
-    }
-
-    const existingUser = await UsersModel.findOne({ email: body.email });
-
-    if (existingUser) {
-      return res.status(400).json({ error: "Existing user" });
+      throwError(
+        "Error to body data request",
+        "ValidationBodyRequestError",
+        400,
+        issues
+      );
     }
 
     const newUser = await UsersModel.create(body);
     res.status(201).json({ data: newUser });
   } catch (error) {
-    console.error("Error in createItem:", error);
-    res.status(500).json({ error: "Internal server error" });
+    handleError(res, error);
   }
 };
 

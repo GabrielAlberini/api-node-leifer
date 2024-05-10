@@ -1,24 +1,20 @@
 import { tokenValidate } from "../utils/handleJwt.js";
 import { UsersModel } from "../models/index.js";
 import { handleError } from "../utils/handleError.js";
+import { throwError } from "../utils/templateError.js";
 
 const authMiddleware = async (req, res, next) => {
-  const header = req.headers.authorization;
-
-  if (!header) {
-    const error = new Error();
-    error.name = "InvalidToken";
-    throw error;
-  }
-
   try {
+    const header = req.headers.authorization;
+
+    if (!header) {
+      throwError("Token is required for access", "InvalidToken", 403);
+    }
     const token = header.split(" ")[1];
     const dataToken = await tokenValidate(token);
 
     if (!dataToken._id) {
-      const error = new Error();
-      error.name = "InvalidToken";
-      throw error;
+      throwError("Invalid Token", "InvalidToken", 403);
     }
 
     const user = await UsersModel.findById(dataToken._id);
